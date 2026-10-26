@@ -1,0 +1,22 @@
+name: Bug report
+description: Training, retrieval, ranking or serving produced wrong results or failed
+labels: [bug]
+body:
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      options: [data preparation, two-tower training, ANN index, ranking, evaluation, serving]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration, command and logs
+      render: shell
