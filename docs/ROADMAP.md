@@ -1,8 +1,8 @@
 # Roadmap
 
-Each milestone lands as a reviewed pull request with tests. Checked items are done.
+Each milestone lands on its own branch with tests and is merged when complete. Checked items are done.
 
-- [ ] **M1: Data** (Oct 26 to Oct 31). Interaction schema and validation, MovieLens loader
+- [x] **M1: Data** (Oct 26 to Oct 31). Interaction schema and validation, MovieLens loader
       with a schema-compatible synthetic fallback, ID mapping, temporal per-user split.
 - [ ] **M2: Two-tower retrieval** (Nov 1 to Nov 8). PyTorch user and item towers, in-batch
       sampled softmax with log-Q correction, training loop with checkpointing, recall@k on
