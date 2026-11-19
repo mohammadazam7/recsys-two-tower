@@ -22,6 +22,8 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+      - name: Install CPU-only PyTorch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: ruff format --check .
@@ -40,5 +42,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: pip
+      - name: Install CPU-only PyTorch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: pip install -e ".[dev]"
       - run: pytest --cov=recsys --cov-report=term-missing
