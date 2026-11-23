@@ -4,7 +4,7 @@ Each milestone lands on its own branch with tests and is merged when complete. C
 
 - [x] **M1: Data** (Oct 26 to Oct 31). Interaction schema and validation, MovieLens loader
       with a schema-compatible synthetic fallback, ID mapping, temporal per-user split.
-- [ ] **M2: Two-tower retrieval** (Nov 1 to Nov 8). PyTorch user and item towers, in-batch
+- [x] **M2: Two-tower retrieval** (Nov 1 to Nov 8). PyTorch user and item towers, in-batch
       sampled softmax with log-Q correction, training loop with checkpointing, recall@k on
       the validation split.
 - [ ] **M3: ANN index** (Nov 9 to Nov 14). FAISS flat and IVF indexes over item embeddings,
