@@ -6,6 +6,9 @@ All notable changes are recorded here. The format follows
 ## [Unreleased]
 
 ### Added
+- Two-tower retrieval model: MLP towers, in-batch sampled softmax with the log-Q
+  correction, deterministic training, recall@k against a popularity baseline, and
+  `examples/train_synthetic.py` to reproduce the README table.
 - Milestone 1: data. Interaction schema validation, `IdMap` for contiguous user
   and item indices, a per-user temporal split with a minimum training history, a
   MovieLens loader and a schema-compatible synthetic generator with latent-factor
