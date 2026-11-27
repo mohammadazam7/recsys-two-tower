@@ -7,7 +7,7 @@ Each milestone lands on its own branch with tests and is merged when complete. C
 - [x] **M2: Two-tower retrieval** (Nov 1 to Nov 8). PyTorch user and item towers, in-batch
       sampled softmax with log-Q correction, training loop with checkpointing, recall@k on
       the validation split.
-- [ ] **M3: ANN index** (Nov 9 to Nov 14). FAISS flat and IVF indexes over item embeddings,
+- [x] **M3: ANN index** (Nov 26). FAISS flat and IVF indexes over item embeddings,
       recall versus exact search, latency per query.
 - [ ] **M4: Ranking** (Nov 15 to Nov 21). Ranking model over retrieved candidates, NDCG@k
       and MAP@k, comparison against retrieval-only ordering.
