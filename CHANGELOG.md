@@ -6,6 +6,9 @@ All notable changes are recorded here. The format follows
 ## [Unreleased]
 
 ### Added
+- `recsys.index`: exact (flat) and approximate (IVF) item indexes with FAISS, retrieval
+  that excludes items a user has already seen, recall against the exact answer, and
+  `examples/ann_benchmark.py` to reproduce the README tables.
 - Two-tower retrieval model: MLP towers, in-batch sampled softmax with the log-Q
   correction, deterministic training, recall@k against a popularity baseline, and
   `examples/train_synthetic.py` to reproduce the README table.

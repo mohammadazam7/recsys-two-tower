@@ -6,8 +6,9 @@ A two-stage recommender: a two-tower model retrieves a few hundred candidates pe
 an approximate nearest neighbour index, and a ranking model orders them. Both stages are
 evaluated offline on a held-out temporal split and served behind a FastAPI endpoint.
 
-> **Status:** milestone 2 in progress. The two-tower retrieval model trains and is
-> evaluated; the ANN index, ranking model and API are not built yet. See the
+> **Status:** milestone 3. The two-tower retrieval model trains and is evaluated, and its
+> item embeddings can be searched exactly or approximately; the ranking model and API are
+> not built yet. See the
 > [roadmap](docs/ROADMAP.md) for milestone dates.
 
 ## Overview
@@ -72,6 +73,50 @@ at 2.10GHz with PyTorch 2.15 (CPU) and Python 3.11.
 
 ```bash
 python examples/train_synthetic.py
+```
+
+## Approximate search: what it costs and what it saves
+
+`recsys.index.ItemIndex` puts the item embeddings behind FAISS, either as a flat index
+(exact: every item is scored) or as an inverted-file index (IVF: items are clustered
+once, and a query opens only the `nprobe` closest clusters). An approximate index is
+reported with its recall against the exact answer, never with speed alone.
+
+**On trained embeddings**, approximate search loses nothing that matters. A two-tower
+model trained on the synthetic dataset (4,000 users, 19,823 items, 5 epochs), each
+user's held-out item looked for in the top 20 after removing items already seen:
+
+| Index | recall@20 of the held-out item | overlap with exact top 20 |
+|---|---|---|
+| flat (exact) | 0.086 | 1.000 |
+| IVF, 128 clusters, nprobe 1 | 0.085 | 0.997 |
+| IVF, 128 clusters, nprobe 4 | 0.086 | 0.999 |
+| IVF, 128 clusters, nprobe 16 | 0.086 | 1.000 |
+
+A catalog of 20,000 items is too small for the index to matter for speed, and the
+trained embeddings are tightly clustered, which is the easy case for IVF.
+
+**At scale** the trade is visible. One million random clustered unit vectors in 32
+dimensions, top 20, single-query latency (median of 500 queries):
+
+| Index | overlap with exact | ms per query | build seconds |
+|---|---|---|---|
+| flat (exact) | 1.000 | 13.181 | 0.1 |
+| IVF, 4,000 clusters, nprobe 1 | 0.464 | 0.031 | 59.3 |
+| IVF, 4,000 clusters, nprobe 4 | 0.823 | 0.047 | 59.3 |
+| IVF, 4,000 clusters, nprobe 16 | 0.973 | 0.102 | 59.3 |
+| IVF, 4,000 clusters, nprobe 64 | 0.998 | 0.322 | 59.3 |
+
+Opening 16 of 4,000 clusters finds 97.3% of the exact neighbours about 130 times faster
+than scoring every vector; opening one cluster is faster still and misses more than half
+of them. The price is a minute of clustering when the index is built. These vectors are
+random, not embeddings of real items, so the recall at a given `nprobe` will differ on
+real data; the shape of the trade does not.
+
+Measured on one thread of an Intel Xeon at 2.80GHz (2 vCPUs) with faiss-cpu 1.16.
+
+```bash
+python examples/ann_benchmark.py
 ```
 
 ## Design decisions
